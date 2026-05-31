@@ -45,8 +45,10 @@
       </ul>
     </div>
 
-    <component-ad v-if="mainTab === 'ad'"></component-ad>
-    <component-config v-if="mainTab === 'config'"></component-config>
+    <keep-alive>
+      <component-ad v-if="mainTab === 'ad'"></component-ad>
+      <component-config v-if="mainTab === 'config'"></component-config>
+    </keep-alive>
 
   </div>
 
