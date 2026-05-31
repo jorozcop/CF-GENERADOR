@@ -46,8 +46,7 @@
     </div>
 
     <keep-alive>
-      <component-ad v-if="mainTab === 'ad'"></component-ad>
-      <component-config v-if="mainTab === 'config'"></component-config>
+      <component :is="mainTab === 'ad' ? 'component-ad' : 'component-config'"></component>
     </keep-alive>
 
   </div>
