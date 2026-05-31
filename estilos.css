@@ -1,43 +1,33 @@
 /* =========================================================================
-   SENA DevSuite - Paleta de Colores y Estilos Globales
-   (Modifica los valores dentro de :root para cambiar la temática visual)
+   CF DevSuite - Paleta de Colores y Estilos Globales
    ========================================================================= */
 
 :root {
-  /* Fondos principales */
-  --bg-principal: #0f172a;        /* Fondo oscuro de la app (Slate 900) */
-  --bg-tarjetas: #1e293b;         /* Fondo de los contenedores (Slate 800) */
-  --bg-consola: #090d16;          /* Fondo de los bloques de código */
-  
-  /* Colores de Texto */
-  --texto-principal: #f8fafc;     /* Blanco suave */
-  --texto-mutado: #94a3b8;        /* Gris para descripciones pequeñas */
-  
-  /* Colores de Acento y Bordes */
-  --color-cian: #0ea5e9;          /* Destacados y barra activa */
-  --color-cian-hover: #38bdf8;    /* Efecto hover cian */
-  --border-card: #334155;         /* Bordes de las cajas */
-  --border-dropzone: #475569;     /* Borde punteado de carga */
-
-  /* Consola de Código */
-  --texto-codigo: #38bdf8;        /* Color del código generado en consola */
+  --bg-principal: #0f172a;
+  --bg-tarjetas: #1e293b;
+  --bg-consola: #090d16;
+  --texto-principal: #f8fafc;
+  --texto-mutado: #94a3b8;
+  --color-cian: #0ea5e9;
+  --color-cian-hover: #38bdf8;
+  --border-card: #334155;
+  --border-dropzone: #475569;
+  --texto-codigo: #38bdf8;
 }
 
-/* --- Estilos del Cuerpo --- */
 body {
   background-color: var(--bg-principal) !important;
   color: var(--texto-principal) !important;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- Contenedores Estilo Tarjeta Premium --- */
 .main-card {
   background-color: var(--bg-tarjetas) !important;
   border: 1px solid var(--border-card) !important;
   border-radius: 16px;
 }
 
-/* --- Pestañas / Control de Control (Pills) --- */
+/* Menú Principal */
 .nav-pills .nav-link {
   color: var(--texto-mutado) !important;
   border: 1px solid transparent !important;
@@ -46,12 +36,10 @@ body {
   font-weight: 500;
   padding: 12px 24px;
 }
-
 .nav-pills .nav-link:hover {
   color: #fff !important;
   background-color: var(--border-card) !important;
 }
-
 .nav-pills .nav-link.active {
   color: var(--color-cian) !important;
   background-color: var(--bg-tarjetas) !important;
@@ -59,7 +47,28 @@ body {
   box-shadow: 0 0 12px rgba(14, 165, 233, 0.2);
 }
 
-/* --- Zonas de Carga de Archivos (Dropzones) --- */
+/* --- ESTILOS EXCLUSIVOS PARA LAS SUB-PESTAÑAS DE RESULTADOS --- */
+.sub-tabs .nav-link {
+  background-color: #111827 !important;
+  color: var(--texto-mutado) !important;
+  border: 1px solid var(--border-card) !important;
+  margin-right: 4px;
+  border-radius: 6px 6px 0 0 !important;
+  padding: 8px 16px !important;
+  font-size: 0.9rem;
+}
+.sub-tabs .nav-link:hover {
+  color: #fff !important;
+  background-color: #1f2937 !important;
+}
+.sub-tabs .nav-link.active {
+  background-color: #090d16 !important;
+  color: var(--color-cian-hover) !important;
+  border-color: var(--border-card) !important;
+  border-bottom-color: transparent !important;
+  font-weight: bold;
+}
+
 .file-dropzone {
   border: 2px dashed var(--border-dropzone) !important;
   border-radius: 12px;
@@ -69,45 +78,34 @@ body {
   cursor: pointer;
   transition: border-color 0.3s;
 }
-
 .file-dropzone:hover {
   border-color: var(--color-cian-hover) !important;
 }
 
-/* --- Inputs y Cajas de Texto de Entrada --- */
 .form-control, .form-control:focus {
   background-color: var(--bg-principal) !important;
   color: #fff !important;
   border-color: var(--border-card) !important;
 }
 
-/* --- Consola Simulada de Código de Salida --- */
 textarea.font-monospace {
   font-family: 'Fira Code', Consolas, Monaco, monospace !important;
   font-size: 0.85rem !important;
   background-color: var(--bg-consola) !important;
   color: var(--texto-codigo) !important;
   border: 1px solid var(--border-card) !important;
-  border-radius: 8px;
+  border-radius: 0 0 8px 8px;
 }
 
-/* --- Botones con Degradados --- */
 .btn-gradient-blue {
   background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
   color: white !important;
   border: none !important;
   font-weight: 600;
 }
-.btn-gradient-blue:hover {
-  background: linear-gradient(135deg, #38bdf8, #3b82f6) !important;
-}
-
 .btn-gradient-green {
   background: linear-gradient(135deg, #10b981, #059669) !important;
   color: white !important;
   border: none !important;
   font-weight: 600;
-}
-.btn-gradient-green:hover {
-  background: linear-gradient(135deg, #34d399, #10b981) !important;
 }
