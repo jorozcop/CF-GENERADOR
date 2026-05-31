@@ -60,15 +60,22 @@ export default {
       reader.readAsText(file);
     };
 
-    const cargarDocx = (e) => {
+  const cargarDocx = (e) => {
       const file = e.target.files[0];
       if (!file) return;
       ad.nombreDocx = file.name;
       const reader = new FileReader();
       reader.onload = (evt) => {
-        mammoth.extractRawText({ arrayBuffer: evt.target.result })
-          .then((res) => { ad.datosDocx = res.value; })
-          .catch((err) => { alert('Error leyendo Word: ' + err.message); });
+        // 🛠️ Cambiamos 'mammoth' por 'window.mammoth'
+        window.mammoth.extractRawText({ arrayBuffer: evt.target.result })
+          .then((res) => { 
+            ad.datosDocx = res.value; 
+            console.log("Word procesado correctamente");
+          })
+          .catch((err) => { 
+            alert('Error leyendo Word: ' + err.message); 
+            console.error(err);
+          });
       };
       reader.readAsArrayBuffer(file);
     };
