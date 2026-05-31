@@ -24,7 +24,7 @@
           <p class="m-0 text-muted small">Herramientas Avanzadas de Automatización para Diseñadores Instruccionales y Desarrolladores Frontend</p>
         </div>
       </div>
-      <span class="badge bg-dark border border-secondary px-3 py-2 text-info font-monospace">v2.5.0-Stable</span>
+      <span class="badge bg-dark border border-secondary px-3 py-2 text-info font-monospace">v2.6.0-Stable</span>
     </div>
 
     <div class="d-flex justify-content-center mb-4">
@@ -119,16 +119,64 @@
 
           <div class="text-center mt-4">
             <button id="btnProcesarComponente" class="btn btn-gradient-blue btn-lg px-5 shadow">
-              <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Estructurar Objeto de Configuración
+              <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Estructurar Objetos Separados
             </button>
           </div>
 
-          <div id="resultadoComponente" class="mt-4 d-none">
-            <div class="d-flex justify-content-between align-items-center mb-2 bg-dark p-2 rounded-2 border border-secondary border-opacity-25">
-              <span class="text-info fw-bold"><i class="fa-solid fa-code me-2"></i>Propiedades JavaScript Generadas</span>
-              <button id="btnCopiarComp" class="btn btn-success btn-sm"><i class="fa-regular fa-copy me-1"></i>Copiar Bloque</button>
+          <div id="resultadoComponente" class="mt-5 d-none">
+            <hr class="border-secondary my-4">
+            <h5 class="text-info mb-3"><i class="fa-solid fa-code me-2"></i>Propiedades JavaScript Generadas</h5>
+            
+            <ul class="nav nav-tabs sub-tabs mb-3" id="subTabsConfig" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="sub-menu-tab" data-bs-toggle="tab" data-bs-target="#sub-menu" type="button" role="tab" aria-controls="sub-menu" aria-selected="true">Menu Principal</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sub-glosario-tab" data-bs-toggle="tab" data-bs-target="#sub-glosario" type="button" role="tab" aria-controls="sub-glosario" aria-selected="false">Glosario</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sub-referencias-tab" data-bs-toggle="tab" data-bs-target="#sub-referencias" type="button" role="tab" aria-controls="sub-referencias" aria-selected="false">Referencias</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="sub-creditos-tab" data-bs-toggle="tab" data-bs-target="#sub-creditos" type="button" role="tab" aria-controls="sub-creditos" aria-selected="false">Créditos</button>
+              </li>
+            </ul>
+
+            <div class="tab-content sub-tab-content bg-black bg-opacity-40 p-3 rounded-bottom border border-top-0 border-secondary border-opacity-50">
+              
+              <div class="tab-pane fade show active" id="sub-menu" role="tabpanel" aria-labelledby="sub-menu-tab">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-muted small">Estructura de la Tabla de Contenido (menuPrincipal)</span>
+                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubMenu"><i class="fa-regular fa-copy me-1"></i>Copiar Menú</button>
+                </div>
+                <textarea id="txtSubMenu" class="form-control font-monospace" rows="12" readonly></textarea>
+              </div>
+
+              <div class="tab-pane fade" id="sub-glosario" role="tabpanel" aria-labelledby="sub-glosario-tab">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-muted small">Arreglo de Términos (glosario)</span>
+                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubGlosario"><i class="fa-regular fa-copy me-1"></i>Copiar Glosario</button>
+                </div>
+                <textarea id="txtSubGlosario" class="form-control font-monospace" rows="12" readonly></textarea>
+              </div>
+
+              <div class="tab-pane fade" id="sub-referencias" role="tabpanel" aria-labelledby="sub-referencias-tab">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-muted small">Fuentes Bibliográficas en Formato HTML (referencias)</span>
+                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubReferencias"><i class="fa-regular fa-copy me-1"></i>Copiar Referencias</button>
+                </div>
+                <textarea id="txtSubReferencias" class="form-control font-monospace" rows="12" readonly></textarea>
+              </div>
+
+              <div class="tab-pane fade" id="sub-creditos" role="tabpanel" aria-labelledby="sub-creditos-tab">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-muted small">Estructura del Equipo de Trabajo (creditos)</span>
+                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubCreditos"><i class="fa-regular fa-copy me-1"></i>Copiar Créditos</button>
+                </div>
+                <textarea id="txtSubCreditos" class="form-control font-monospace" rows="12" readonly></textarea>
+              </div>
+
             </div>
-            <textarea id="txtResultadoComp" class="form-control font-monospace" rows="15" readonly></textarea>
           </div>
         </div>
       </div>
@@ -251,43 +299,44 @@
       const element = document.createElement('a'); element.href = URL.createObjectURL(blob); element.download = 'Actividad.vue'; element.click();
     });
 
+    /* --- LÓGICA CON SUB-PESTAÑAS SEPARADAS PARA EL COMPONENTE AUTÓNOMO --- */
     document.getElementById('btnProcesarComponente').addEventListener('click', function() {
-      let output = "export default {\n";
-
+      
+      // 1. Procesar Menú
+      let outMenu = "menuPrincipal: {\n  menu: [\n";
       const rawCont = document.getElementById('rawContenido').value.trim();
       if (rawCont) {
         const lineas = rawCont.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        output += "  menuPrincipal: {\n    menu: [\n";
         let subOpen = false;
-
         lineas.forEach(l => {
           if (l.toLowerCase().startsWith('introduccion') || l.toLowerCase().startsWith('introducción')) {
-            output += "      {\n        nombreRuta: 'introduccion',\n        icono: 'fas fa-info',\n        titulo: 'Introducción',\n      },\n";
+            outMenu += "    {\n      nombreRuta: 'introduccion',\n      icono: 'fas fa-info',\n      titulo: 'Introducción',\n    },\n";
             return;
           }
           let mUnidad = l.match(/^(\d+)\.\s*(.*)/);
           let mSub = l.match(/^(\d+\.\d+)\s*(.*)/);
-
           if (mSub) {
-            output += `          {\n            numero: '${mSub[1]}',\n            titulo: '${mSub[2].trim()}',\n            hash: 't_${mSub[1].replace(/\./g, '_')}',\n          },\n`;
+            outMenu += `        {\n          numero: '${mSub[1]}',\n          titulo: '${mSub[2].trim()}',\n          hash: 't_${mSub[1].replace(/\./g, '_')}',\n        },\n`;
           } else if (mUnidad) {
-            if (subOpen) { output += "        ],\n      },\n"; subOpen = false; }
-            output += "      {\n";
-            output += `        nombreRuta: 'tema${mUnidad[1]}',\n`;
-            output += `        numero: '${mUnidad[1]}',\n`;
-            output += `        titulo: '${mUnidad[2].trim()}',\n`;
-            output += "        desarrolloContenidos: true,\n";
-            output += "        subMenu: [\n";
+            if (subOpen) { outMenu += "      ],\n    },\n"; subOpen = false; }
+            outMenu += "    {\n";
+            outMenu += `      nombreRuta: 'tema${mUnidad[1]}',\n`;
+            outMenu += `      numero: '${mUnidad[1]}',\n`;
+            outMenu += `      titulo: '${mUnidad[2].trim()}',\n`;
+            outMenu += "      desarrolloContenidos: true,\n";
+            outMenu += "      subMenu: [\n";
             subOpen = true;
           }
         });
-        if (subOpen) { output += "        ],\n      },\n"; }
-        output += "    ],\n  },\n";
+        if (subOpen) { outMenu += "      ],\n    },\n"; }
       }
+      outMenu += "  ],\n},";
+      document.getElementById('txtSubMenu').value = outMenu;
 
+      // 2. Procesar Glosario
+      let outGlos = "glosario: [\n";
       const rawGlos = document.getElementById('rawGlosario').value.trim();
       if (rawGlos) {
-        output += "  glosario: [\n";
         const linesG = rawGlos.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         linesG.forEach(l => {
           let pts = l.split(/:\s*/);
@@ -295,67 +344,73 @@
             let term = pts[0].trim();
             let sig = pts.slice(1).join(':').trim();
             sig = sig.charAt(0).toUpperCase() + sig.slice(1);
-            output += "    {\n";
-            output += `      termino: '${term}',\n`;
-            output += `      significado:\n        '${sig.replace(/'/g, "\\'")}',\n`;
-            output += "    },\n";
+            outGlos += "  {\n";
+            outGlos += `    termino: '${term}',\n`;
+            outGlos += `    significado:\n      '${sig.replace(/'/g, "\\'")}',\n  },\n`;
           }
         });
-        output += "  ],\n";
       }
+      outGlos += "],";
+      document.getElementById('txtSubGlosario').value = outGlos;
 
+      // 3. Procesar Referencias
+      let outRef = "referencias: [\n";
       const rawRef = document.getElementById('rawReferencias').value.trim();
       if (rawRef) {
-        output += "  referencias: [\n";
         const linesR = rawRef.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         linesR.forEach(l => {
-          output += "    {\n";
-          output += `      referencia:\n        '${convertirAsteriscosAItalicas(l).replace(/'/g, "\\'")}',\n`;
-          output += "    },\n";
+          outRef += "  {\n";
+          outRef += `    referencia:\n      '${convertirAsteriscosAItalicas(l).replace(/'/g, "\\'")}',\n  },\n`;
         });
-        output += "  ],\n";
       }
+      outRef += "],";
+      document.getElementById('txtSubReferencias').value = outRef;
 
+      // 4. Procesar Créditos
+      let outCred = "creditos: [\n";
       const rawCred = document.getElementById('rawCreditos').value.trim();
       if (rawCred) {
-        output += "  creditos: [\n";
         const bloques = rawCred.split(/\n(?=--)/);
         bloques.forEach(b => {
           const linesB = b.split('\n').map(l => l.trim()).filter(l => l.length > 0);
           if (linesB.length > 0) {
             let titleB = linesB[0].replace(/^--\s*/, '').toUpperCase();
-            output += "    {\n";
-            output += `      titulo: '${titleB}',\n`;
-            output += "      autores: [\n";
+            outCred += "  {\n";
+            outCred += `    titulo: '${titleB}',\n`;
+            outCred += "    autores: [\n";
             for (let k = 1; k < linesB.length; k++) {
               let ptsA = linesB[k].split('|');
               if (ptsA.length >= 2) {
                 let nom = ptsA[0].trim();
                 let carg = convertirAsteriscosAItalicas(ptsA[1].trim());
                 let cent = ptsA[2] ? ptsA[2].trim() : 'Centro de Comercio y Servicios - Regional Tolima';
-                output += "        {\n";
-                output += `          nombre: '${nom}',\n`;
-                output += `          cargo: '${carg}',\n`;
-                output += `          centro: '${cent}',\n`;
-                output += "        },\n";
+                outCred += "      {\n";
+                outCred += `        nombre: '${nom}',\n`;
+                outCred += `        cargo: '${carg}',\n`;
+                outCred += `        centro: '${cent}',\n`;
+                outCred += "      },\n";
               }
             }
-            output += "      ],\n";
-            output += "    },\n";
+            outCred += "    ],\n  },\n";
           }
         });
-        output += "  ],\n";
       }
+      outCred += "],";
+      document.getElementById('txtSubCreditos').value = outCred;
 
-      output += "};\n";
-      document.getElementById('txtResultadoComp').value = output;
+      // Mostrar contenedor general de resultados
       document.getElementById('resultadoComponente').classList.remove('d-none');
     });
 
-    document.getElementById('btnCopiarComp').addEventListener('click', () => {
-      document.getElementById('txtResultadoComp').select();
-      document.execCommand('copy');
-      alert('📋 Código de Configuración copiado.');
+    // Delegación de eventos para los botones de copia de las sub-pestañas
+    document.querySelectorAll('.btn-copy-sub').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        const txtArea = document.getElementById(targetId);
+        txtArea.select();
+        document.execCommand('copy');
+        alert('📋 Bloque copiado al portapapeles.');
+      });
     });
   </script>
 </body>
