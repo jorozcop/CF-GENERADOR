@@ -66,18 +66,29 @@ export default {
       ad.nombreDocx = file.name;
 
       // Definimos una pequeña función para esperar a mammoth
-      const procesarArchivo = (buffer) => {
-        if (window.mammoth) {
-          window.mammoth.extractRawText({ arrayBuffer: buffer })
-            .then((res) => { ad.datosDocx = res.value; })
-            .catch((err) => { alert('Error en Mammoth: ' + err.message); });
+      const cargarDocx = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      ad.nombreDocx = file.name;
+      
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        // Validación estricta de Mammoth
+        if (typeof window.mammoth !== 'undefined') {
+          window.mammoth.extractRawText({ arrayBuffer: evt.target.result })
+            .then((res) => { 
+              ad.datosDocx = res.value; // Esto habilitará el botón
+              console.log("Word procesado, contenido length:", ad.datosDocx.length);
+            })
+            .catch((err) => { alert('Error: ' + err.message); });
         } else {
-          console.error("Mammoth aún no está cargado, reintentando en 500ms...");
-          setTimeout(() => procesarArchivo(buffer), 500);
+          alert('Error crítico: Mammoth no cargó. Refresca la página.');
         }
       };
+      reader.readAsArrayBuffer(file);
+    };
 
-      const reader = new FileReader();
+    const reader = new FileReader();
       reader.onload = (evt) => {
         procesarArchivo(evt.target.result);
       };
