@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Suite de Automatización - CF</title>
+  <title>SENA DevSuite 2026</title>
   
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="estilos.css">
   
-  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <link rel="stylesheet" href="estilos.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/dist/mammoth.browser.min.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
 
-  <div class="container my-5">
+  <div id="app" class="container my-5">
+    
     <div class="d-flex align-items-center justify-content-between mb-4 p-3 main-card">
       <div class="d-flex align-items-center gap-3">
         <div class="p-3 rounded-3 text-info" style="background-color: rgba(14, 165, 233, 0.1);">
@@ -21,397 +24,48 @@
         </div>
         <div>
           <h2 class="m-0 fw-bold text-white">SENA DevSuite 2026</h2>
-          <p class="m-0 text-muted small">Herramientas Avanzadas de Automatización para Diseñadores Instruccionales y Desarrolladores Frontend</p>
+          <p class="m-0 text-white-50 small">Herramientas de Automatización en Arquitectura de Servidor Local</p>
         </div>
       </div>
-      <span class="badge bg-dark border border-secondary px-3 py-2 text-info font-monospace">v2.6.0-Stable</span>
+      <span class="badge bg-dark border border-secondary px-3 py-2 text-info font-monospace">v3.0.0-Local</span>
     </div>
 
     <div class="d-flex justify-content-center mb-4">
-      <ul class="nav nav-pills gap-2 p-2 bg-dark bg-opacity-50 rounded-3 border border-secondary border-opacity-25" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="pills-ad-tab" data-bs-toggle="pill" data-bs-target="#pills-ad" type="button" role="tab" aria-controls="pills-ad" aria-selected="true">
+      <ul class="nav nav-pills gap-2 p-2 bg-dark bg-opacity-50 rounded-3 border border-secondary border-opacity-25">
+        <li class="nav-item">
+          <button class="nav-link" :class="{ active: mainTab === 'ad' }" @click="mainTab = 'ad'">
             <i class="fa-solid fa-crosshairs me-2"></i>Actividad Didáctica (AD)
           </button>
         </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="pills-config-tab" data-bs-toggle="pill" data-bs-target="#pills-config" type="button" role="tab" aria-controls="pills-config" aria-selected="false">
+        <li class="nav-item">
+          <button class="nav-link" :class="{ active: mainTab === 'config' }" @click="mainTab = 'config'">
             <i class="fa-solid fa-book-bookmark me-2"></i>Componente Autónomo (Config)
           </button>
         </li>
       </ul>
     </div>
 
-    <div class="tab-content" id="pills-tabContent">
-      
-      <div class="tab-pane fade show active" id="pills-ad" role="tabpanel" aria-labelledby="pills-ad-tab">
-        <div class="card main-card p-4 shadow-lg">
-          <div class="mb-4">
-            <h4 class="text-white fw-bold"><i class="fa-solid fa-file-code text-success me-2"></i>Inyector Dinámico de Preguntas (Actividad.vue)</h4>
-            <p class="text-muted small m-0">Inyecta el cuestionario formateado desde el archivo Word preservando secuencialmente el mapa de imágenes original.</p>
-          </div>
+    <component-ad v-if="mainTab === 'ad'"></component-ad>
+    <component-config v-if="mainTab === 'config'"></component-config>
 
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="file-dropzone" onclick="document.getElementById('fileVue').click()">
-                <i class="fa-solid fa-code-branch fa-2x text-info mb-2"></i>
-                <h6 class="text-white mb-1">Archivo Base Actividad.vue</h6>
-                <p class="text-muted small mb-3">Haz clic para buscar o arrastra el archivo original de la AD</p>
-                <input type="file" id="fileVue" class="form-control d-none" accept=".vue">
-                <span id="statusVue" class="badge bg-secondary">Sin cargar</span>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="file-dropzone" onclick="document.getElementById('fileDocx').click()">
-                <i class="fa-regular fa-file-word fa-2x text-primary mb-2"></i>
-                <h6 class="text-white mb-1">Documento de Word (.docx)</h6>
-                <p class="text-muted small mb-3">Carga la guía técnica con la matriz del cuestionario</p>
-                <input type="file" id="fileDocx" class="form-control d-none" accept=".docx">
-                <span id="statusDocx" class="badge bg-secondary">Sin cargar</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-center mt-4">
-            <button id="btnProcesarAD" class="btn btn-gradient-green btn-lg px-5 shadow" disabled>
-              <i class="fa-solid fa-gear me-2"></i>Procesar y Sincronizar AD
-            </button>
-          </div>
-
-          <div id="resultadoAD" class="mt-4 d-none">
-            <div class="d-flex justify-content-between align-items-center mb-2 bg-dark p-2 rounded-2 border border-secondary border-opacity-25">
-              <span class="text-success fw-bold"><i class="fa-solid fa-circle-check me-2"></i>¡Compilación Exitosa!</span>
-              <div>
-                <button id="btnCopiarAD" class="btn btn-outline-info btn-sm me-2"><i class="fa-regular fa-copy me-1"></i>Copiar Código</button>
-                <button id="btnDescargarAD" class="btn btn-info btn-sm"><i class="fa-solid fa-download me-1"></i>Descargar Actividad.vue</button>
-              </div>
-            </div>
-            <textarea id="txtResultadoAD" class="form-control font-monospace" rows="15" readonly></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-pane fade" id="pills-config" role="tabpanel" aria-labelledby="pills-config-tab">
-        <div class="card main-card p-4 shadow-lg">
-          <div class="mb-4">
-            <h4 class="text-white fw-bold"><i class="fa-solid fa-cubes text-primary me-2"></i>Estructurador Global de Propiedades (config.js)</h4>
-            <p class="text-muted small m-0">Ingresa los bloques de datos limpios extraídos de las guías base para construir de forma organizada la configuración de tu componente.</p>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label text-light small fw-bold"><i class="fa-solid fa-list-ol text-warning me-1"></i>1. Tabla de Contenido:</label>
-              <textarea id="rawContenido" class="form-control font-monospace text-muted" rows="4" placeholder="Introducción&#10;1. Gestión de Carteras&#10;1.1 Modelos de Negociación"></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label text-light small fw-bold"><i class="fa-solid fa-spell-check text-info me-1"></i>2. Glosario de Términos:</label>
-              <textarea id="rawGlosario" class="form-control font-monospace text-muted" rows="4" placeholder="Mora: Situación de retraso...&#10;Interés: Costo del dinero..."></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label text-light small fw-bold"><i class="fa-solid fa-book text-danger me-1"></i>3. Referencias Bibliográficas:</label>
-              <textarea id="rawReferencias" class="form-control font-monospace text-muted" rows="4" placeholder="SENA. (2026). *Guía de buenas prácticas*..."></textarea>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label text-light small fw-bold"><i class="fa-solid fa-users text-success me-1"></i>4. Equipo de Desarrollo / Créditos:</label>
-              <textarea id="rawCreditos" class="form-control font-monospace text-muted" rows="4" placeholder="-- ECOSISTEMA DE RECURSOS DIGITALES&#10;Nombre Apellido | Integrador Frontend | Regional Tolima"></textarea>
-            </div>
-          </div>
-
-          <div class="text-center mt-4">
-            <button id="btnProcesarComponente" class="btn btn-gradient-blue btn-lg px-5 shadow">
-              <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Estructurar Objetos Separados
-            </button>
-          </div>
-
-          <div id="resultadoComponente" class="mt-5 d-none">
-            <hr class="border-secondary my-4">
-            <h5 class="text-info mb-3"><i class="fa-solid fa-code me-2"></i>Propiedades JavaScript Generadas</h5>
-            
-            <ul class="nav nav-tabs sub-tabs mb-3" id="subTabsConfig" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="sub-menu-tab" data-bs-toggle="tab" data-bs-target="#sub-menu" type="button" role="tab" aria-controls="sub-menu" aria-selected="true">Menu Principal</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="sub-glosario-tab" data-bs-toggle="tab" data-bs-target="#sub-glosario" type="button" role="tab" aria-controls="sub-glosario" aria-selected="false">Glosario</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="sub-referencias-tab" data-bs-toggle="tab" data-bs-target="#sub-referencias" type="button" role="tab" aria-controls="sub-referencias" aria-selected="false">Referencias</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="sub-creditos-tab" data-bs-toggle="tab" data-bs-target="#sub-creditos" type="button" role="tab" aria-controls="sub-creditos" aria-selected="false">Créditos</button>
-              </li>
-            </ul>
-
-            <div class="tab-content sub-tab-content bg-black bg-opacity-40 p-3 rounded-bottom border border-top-0 border-secondary border-opacity-50">
-              
-              <div class="tab-pane fade show active" id="sub-menu" role="tabpanel" aria-labelledby="sub-menu-tab">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="text-muted small">Estructura de la Tabla de Contenido (menuPrincipal)</span>
-                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubMenu"><i class="fa-regular fa-copy me-1"></i>Copiar Menú</button>
-                </div>
-                <textarea id="txtSubMenu" class="form-control font-monospace" rows="12" readonly></textarea>
-              </div>
-
-              <div class="tab-pane fade" id="sub-glosario" role="tabpanel" aria-labelledby="sub-glosario-tab">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="text-muted small">Arreglo de Términos (glosario)</span>
-                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubGlosario"><i class="fa-regular fa-copy me-1"></i>Copiar Glosario</button>
-                </div>
-                <textarea id="txtSubGlosario" class="form-control font-monospace" rows="12" readonly></textarea>
-              </div>
-
-              <div class="tab-pane fade" id="sub-referencias" role="tabpanel" aria-labelledby="sub-referencias-tab">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="text-muted small">Fuentes Bibliográficas en Formato HTML (referencias)</span>
-                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubReferencias"><i class="fa-regular fa-copy me-1"></i>Copiar Referencias</button>
-                </div>
-                <textarea id="txtSubReferencias" class="form-control font-monospace" rows="12" readonly></textarea>
-              </div>
-
-              <div class="tab-pane fade" id="sub-creditos" role="tabpanel" aria-labelledby="sub-creditos-tab">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                  <span class="text-muted small">Estructura del Equipo de Trabajo (creditos)</span>
-                  <button class="btn btn-success btn-sm btn-copy-sub" data-target="txtSubCreditos"><i class="fa-regular fa-copy me-1"></i>Copiar Créditos</button>
-                </div>
-                <textarea id="txtSubCreditos" class="form-control font-monospace" rows="12" readonly></textarea>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script type="module">
+    import ActividadInjector from './src/components/ActividadInjector.js';
+    import ConfigEstructurador from './src/components/ConfigEstructurador.js';
 
-  <script>
-    function convertirAsteriscosAItalicas(t) {
-      let count = 0;
-      return t.replace(/\*/g, () => { count++; return count % 2 !== 0 ? '<em>' : '</em>'; });
-    }
+    const { createApp, ref } = Vue;
 
-    let contenidoVueOriginal = '';
-    let datosDocxExtraidos = '';
-
-    const inputVue = document.getElementById('fileVue');
-    const inputDocx = document.getElementById('fileDocx');
-    const statusVue = document.getElementById('statusVue');
-    const statusDocx = document.getElementById('statusDocx');
-    const btnProcesarAD = document.getElementById('btnProcesarAD');
-    const resultadoAD = document.getElementById('resultadoAD');
-    const txtResultadoAD = document.getElementById('txtResultadoAD');
-
-    function checkInputs() {
-      if (contenidoVueOriginal && datosDocxExtraidos) { btnProcesarAD.disabled = false; }
-    }
-
-    inputVue.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      statusVue.innerText = file.name;
-      statusVue.className = "badge bg-success";
-      const reader = new FileReader();
-      reader.onload = function(evt) { contenidoVueOriginal = evt.target.result; checkInputs(); };
-      reader.readAsText(file);
-    });
-
-    inputDocx.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      statusDocx.innerText = file.name;
-      statusDocx.className = "badge bg-success";
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        mammoth.extractRawText({ arrayBuffer: evt.target.result })
-          .then(function(res) { datosDocxExtraidos = res.value; checkInputs(); })
-          .catch(function(err) { alert('Error leyendo .docx: ' + err.message); });
-      };
-      reader.readAsArrayBuffer(file);
-    });
-
-    btnProcesarAD.addEventListener('click', function() {
-      try {
-        const regexImg = /imagen:\s*(require\([^)]+\))/g;
-        const listImgs = [];
-        let match;
-        while ((match = regexImg.exec(contenidoVueOriginal)) !== null) { listImgs.push(match[1]); }
-
-        const lineas = datosDocxExtraidos.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        let tema = '', introduccion = '', preguntas = [], pregAct = null;
-        let msgAp = '¡Excelente! Ha superado la actividad.', msgRep = 'Le recomendamos volver a revisar el componente formativo e intentar nuevamente la actividad didáctica.';
-
-        for (let i = 0; i < lineas.length; i++) {
-          const linea = lineas[i];
-          if (linea.toLowerCase().startsWith('nombre de la actividad')) {
-            tema = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
-            tema = tema.replace(/^"|"$/g, '');
-            continue;
-          }
-          if (linea.toLowerCase().startsWith('objetivo de la actividad')) {
-            introduccion = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
-            introduccion = introduccion.replace(/^"|"$/g, '');
-            continue;
-          }
-          if (/^pregunta\s*\d+/i.test(linea)) {
-            if (pregAct) preguntas.push(pregAct);
-            let txt = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
-            pregAct = { texto: txt.replace(/^"|"$/g, ''), opciones: [] };
-            continue;
-          }
-          if (pregAct && /^opción\s*[a-e]\)/i.test(linea)) {
-            const esCor = /,x$/i.test(linea) || linea.toLowerCase().endsWith(',x"') || /,[xX]$/.test(linea) || linea.toLowerCase().endsWith('x') || linea.toLowerCase().endsWith('x"');
-            let txtO = linea.replace(/^opción\s*[a-e]\)\s*,?/i, '').replace(/,x$/i, '').replace(/,x"$/i, '').replace(/,X$/i, '').replace(/x$/i, '').replace(/X$/i, '').replace(/^"|"$/g, '').trim();
-            pregAct.opciones.push({ texto: txtO, esCorrecta: esCor });
-            continue;
-          }
-          if (linea.toLowerCase().startsWith('mensaje cuando supera el 70 %')) {
-            msgAp = linea.substring(linea.indexOf(',') + 1).trim().replace(/^"|"$/g, '');
-            continue;
-          }
-          if (linea.toLowerCase().startsWith('mensaje cuando el porcentaje de respuestas correctas es inferior')) {
-            msgRep = linea.substring(linea.indexOf(',') + 1).trim().replace(/^"|"$/g, '');
-            continue;
-          }
-        }
-        if (pregAct) preguntas.push(pregAct);
-
-        if (introduccion && !introduccion.startsWith('<b> Objetivo:</b>')) { introduccion = `<b> Objetivo:</b> ${introduccion}`; }
-
-        const letras = ['a', 'b', 'c', 'd', 'e'];
-        const listPregsJS = preguntas.map((p, idx) => {
-          const img = listImgs[idx] || "require('@/assets/actividad/imagen1.png')";
-          const opcsJS = p.opciones.map((o, oIdx) => `            {\n              id: '${letras[oIdx] || oIdx}',\n              texto: '${o.texto.replace(/'/g, "\\'")}',\n              esCorrecta: ${o.esCorrecta},\n            }`).join(',\n');
-          return `        {\n          id: ${idx + 1},\n          texto: '${p.texto.replace(/'/g, "\\'")}',\n          imagen: ${img},\n          barajarRespuestas: true,\n          opciones: [\n${opcsJS}\n          ],\n          mensaje_correcto: '¡Muy bien! Ha acertado la respuesta.',\n          mensaje_incorrecto: 'Lo sentimos, su respuesta no es la correcta.',\n        }`;
-        }).join(',\n');
-
-        const templateCuestionario = `cuestionario: {\n      tema: '${tema.replace(/'/g, "\\'")}',\n      titulo: 'Cuestionario',\n      introduccion:\n        '${introduccion.replace(/'/g, "\\'")}',\n      barajarPreguntas: true,\n      titulo_aprobado: '¡BUEN TRABAJO!',\n      titulo_reprobado: 'VUELVA A INTENTARLO.',\n      preguntas: [\n${listPregsJS}\n      ],\n      mensaje_final_aprobado: '${msgAp.replace(/'/g, "\\'")}',\n      mensaje_final_reprobado:\n        '${msgRep.replace(/'/g, "\\'")}',\n    },`;
-
-        txtResultadoAD.value = contenidoVueOriginal.replace(/(cuestionario:\s*\{)([\s\S]*?)(mensaje_final_reprobado:[\s\S]*?\n\s*\},)/, templateCuestionario);
-        resultadoAD.classList.remove('d-none');
-      } catch (err) { alert('Error al compilar la Actividad Didáctica.'); console.error(err); }
-    });
-
-    document.getElementById('btnCopiarAD').addEventListener('click', () => { txtResultadoAD.select(); document.execCommand('copy'); alert('📋 Código copiado.'); });
-    document.getElementById('btnDescargarAD').addEventListener('click', () => {
-      const blob = new Blob([txtResultadoAD.value], { type: 'text/plain;charset=utf-8' });
-      const element = document.createElement('a'); element.href = URL.createObjectURL(blob); element.download = 'Actividad.vue'; element.click();
-    });
-
-    /* --- LÓGICA CON SUB-PESTAÑAS SEPARADAS PARA EL COMPONENTE AUTÓNOMO --- */
-    document.getElementById('btnProcesarComponente').addEventListener('click', function() {
-      
-      // 1. Procesar Menú
-      let outMenu = "menuPrincipal: {\n  menu: [\n";
-      const rawCont = document.getElementById('rawContenido').value.trim();
-      if (rawCont) {
-        const lineas = rawCont.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        let subOpen = false;
-        lineas.forEach(l => {
-          if (l.toLowerCase().startsWith('introduccion') || l.toLowerCase().startsWith('introducción')) {
-            outMenu += "    {\n      nombreRuta: 'introduccion',\n      icono: 'fas fa-info',\n      titulo: 'Introducción',\n    },\n";
-            return;
-          }
-          let mUnidad = l.match(/^(\d+)\.\s*(.*)/);
-          let mSub = l.match(/^(\d+\.\d+)\s*(.*)/);
-          if (mSub) {
-            outMenu += `        {\n          numero: '${mSub[1]}',\n          titulo: '${mSub[2].trim()}',\n          hash: 't_${mSub[1].replace(/\./g, '_')}',\n        },\n`;
-          } else if (mUnidad) {
-            if (subOpen) { outMenu += "      ],\n    },\n"; subOpen = false; }
-            outMenu += "    {\n";
-            outMenu += `      nombreRuta: 'tema${mUnidad[1]}',\n`;
-            outMenu += `      numero: '${mUnidad[1]}',\n`;
-            outMenu += `      titulo: '${mUnidad[2].trim()}',\n`;
-            outMenu += "      desarrolloContenidos: true,\n";
-            outMenu += "      subMenu: [\n";
-            subOpen = true;
-          }
-        });
-        if (subOpen) { outMenu += "      ],\n    },\n"; }
+    createApp({
+      components: {
+        'component-ad': ActividadInjector,
+        'component-config': ConfigEstructurador
+      },
+      setup() {
+        const mainTab = ref('ad');
+        return { mainTab };
       }
-      outMenu += "  ],\n},";
-      document.getElementById('txtSubMenu').value = outMenu;
-
-      // 2. Procesar Glosario
-      let outGlos = "glosario: [\n";
-      const rawGlos = document.getElementById('rawGlosario').value.trim();
-      if (rawGlos) {
-        const linesG = rawGlos.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        linesG.forEach(l => {
-          let pts = l.split(/:\s*/);
-          if (pts.length >= 2) {
-            let term = pts[0].trim();
-            let sig = pts.slice(1).join(':').trim();
-            sig = sig.charAt(0).toUpperCase() + sig.slice(1);
-            outGlos += "  {\n";
-            outGlos += `    termino: '${term}',\n`;
-            outGlos += `    significado:\n      '${sig.replace(/'/g, "\\'")}',\n  },\n`;
-          }
-        });
-      }
-      outGlos += "],";
-      document.getElementById('txtSubGlosario').value = outGlos;
-
-      // 3. Procesar Referencias
-      let outRef = "referencias: [\n";
-      const rawRef = document.getElementById('rawReferencias').value.trim();
-      if (rawRef) {
-        const linesR = rawRef.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        linesR.forEach(l => {
-          outRef += "  {\n";
-          outRef += `    referencia:\n      '${convertirAsteriscosAItalicas(l).replace(/'/g, "\\'")}',\n  },\n`;
-        });
-      }
-      outRef += "],";
-      document.getElementById('txtSubReferencias').value = outRef;
-
-      // 4. Procesar Créditos
-      let outCred = "creditos: [\n";
-      const rawCred = document.getElementById('rawCreditos').value.trim();
-      if (rawCred) {
-        const bloques = rawCred.split(/\n(?=--)/);
-        bloques.forEach(b => {
-          const linesB = b.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-          if (linesB.length > 0) {
-            let titleB = linesB[0].replace(/^--\s*/, '').toUpperCase();
-            outCred += "  {\n";
-            outCred += `    titulo: '${titleB}',\n`;
-            outCred += "    autores: [\n";
-            for (let k = 1; k < linesB.length; k++) {
-              let ptsA = linesB[k].split('|');
-              if (ptsA.length >= 2) {
-                let nom = ptsA[0].trim();
-                let carg = convertirAsteriscosAItalicas(ptsA[1].trim());
-                let cent = ptsA[2] ? ptsA[2].trim() : 'Centro de Comercio y Servicios - Regional Tolima';
-                outCred += "      {\n";
-                outCred += `        nombre: '${nom}',\n`;
-                outCred += `        cargo: '${carg}',\n`;
-                outCred += `        centro: '${cent}',\n`;
-                outCred += "      },\n";
-              }
-            }
-            outCred += "    ],\n  },\n";
-          }
-        });
-      }
-      outCred += "],";
-      document.getElementById('txtSubCreditos').value = outCred;
-
-      // Mostrar contenedor general de resultados
-      document.getElementById('resultadoComponente').classList.remove('d-none');
-    });
-
-    // Delegación de eventos para los botones de copia de las sub-pestañas
-    document.querySelectorAll('.btn-copy-sub').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
-        const txtArea = document.getElementById(targetId);
-        txtArea.select();
-        document.execCommand('copy');
-        alert('📋 Bloque copiado al portapapeles.');
-      });
-    });
+    }).mount('#app');
   </script>
 </body>
 </html>

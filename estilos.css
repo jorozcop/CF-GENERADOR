@@ -1,111 +1,65 @@
-/* =========================================================================
-   CF DevSuite - Paleta de Colores y Estilos Globales
-   ========================================================================= */
+/* ==========================================================================
+   SENA DevSuite 2026 - Paleta de Colores y Estilos Globales
+   ========================================================================== */
 
-:root {
-  --bg-principal: #0f172a;
-  --bg-tarjetas: #1e293b;
-  --bg-consola: #090d16;
-  --texto-principal: #f8fafc;
-  --texto-mutado: #94a3b8;
-  --color-cian: #0ea5e9;
-  --color-cian-hover: #38bdf8;
-  --border-card: #334155;
-  --border-dropzone: #475569;
-  --texto-codigo: #38bdf8;
+body { 
+  background-color: #121214; 
+  color: #ffffff !important; 
+  font-family: 'Segoe UI', sans-serif; 
 }
 
-body {
-  background-color: var(--bg-principal) !important;
-  color: var(--texto-principal) !important;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Corrige los textos explicativos secundarios para que sean legibles */
+.text-muted {
+  color: #cbd5e1 !important;
 }
 
-.main-card {
-  background-color: var(--bg-tarjetas) !important;
-  border: 1px solid var(--border-card) !important;
-  border-radius: 16px;
+.main-card { 
+  background-color: #1a1a1e; 
+  border: 1px solid #2d2d34; 
+  border-radius: 12px; 
 }
 
-/* Menú Principal */
-.nav-pills .nav-link {
-  color: var(--texto-mutado) !important;
-  border: 1px solid transparent !important;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-  padding: 12px 24px;
-}
-.nav-pills .nav-link:hover {
-  color: #fff !important;
-  background-color: var(--border-card) !important;
-}
-.nav-pills .nav-link.active {
-  color: var(--color-cian) !important;
-  background-color: var(--bg-tarjetas) !important;
-  border-color: var(--color-cian) !important;
-  box-shadow: 0 0 12px rgba(14, 165, 233, 0.2);
+/* Estilos de las etiquetas de los formularios en blanco */
+.form-label {
+  color: #ffffff !important;
 }
 
-/* --- ESTILOS EXCLUSIVOS PARA LAS SUB-PESTAÑAS DE RESULTADOS --- */
-.sub-tabs .nav-link {
-  background-color: #111827 !important;
-  color: var(--texto-mutado) !important;
-  border: 1px solid var(--border-card) !important;
-  margin-right: 4px;
-  border-radius: 6px 6px 0 0 !important;
-  padding: 8px 16px !important;
-  font-size: 0.9rem;
+/* Ajuste del dropzone para la carga de archivos (.vue y .docx) */
+.file-dropzone { 
+  border: 2px dashed #4b5563; 
+  background-color: #1e1e24; 
+  border-radius: 10px; 
+  padding: 30px; 
+  text-align: center; 
+  cursor: pointer; 
+  transition: all 0.3s; 
 }
-.sub-tabs .nav-link:hover {
-  color: #fff !important;
-  background-color: #1f2937 !important;
+.file-dropzone:hover { 
+  border-color: #0ea5e9; 
+  background-color: #24242b; 
 }
-.sub-tabs .nav-link.active {
-  background-color: #090d16 !important;
-  color: var(--color-cian-hover) !important;
-  border-color: var(--border-card) !important;
-  border-bottom-color: transparent !important;
-  font-weight: bold;
+.file-dropzone p.text-muted {
+  color: #cbd5e1 !important;
 }
 
-.file-dropzone {
-  border: 2px dashed var(--border-dropzone) !important;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  background-color: var(--bg-principal) !important;
-  cursor: pointer;
-  transition: border-color 0.3s;
+/* Botones con degradados */
+.btn-gradient-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; }
+.btn-gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; border: none; }
+
+/* Pestañas de navegación superiores */
+.nav-pills .nav-link { color: #ffffff; }
+.nav-pills .nav-link.active { background-color: #0ea5e9; color: white; }
+
+/* Áreas de texto (Textareas) para código generado */
+textarea { 
+  background-color: #0f172a !important; 
+  color: #38bdf8 !important; 
+  border: 1px solid #334155 !important; 
 }
-.file-dropzone:hover {
-  border-color: var(--color-cian-hover) !important;
+textarea::placeholder {
+  color: #64748b !important;
 }
 
-.form-control, .form-control:focus {
-  background-color: var(--bg-principal) !important;
-  color: #fff !important;
-  border-color: var(--border-card) !important;
-}
-
-textarea.font-monospace {
-  font-family: 'Fira Code', Consolas, Monaco, monospace !important;
-  font-size: 0.85rem !important;
-  background-color: var(--bg-consola) !important;
-  color: var(--texto-codigo) !important;
-  border: 1px solid var(--border-card) !important;
-  border-radius: 0 0 8px 8px;
-}
-
-.btn-gradient-blue {
-  background: linear-gradient(135deg, #0ea5e9, #2563eb) !important;
-  color: white !important;
-  border: none !important;
-  font-weight: 600;
-}
-.btn-gradient-green {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  color: white !important;
-  border: none !important;
-  font-weight: 600;
-}
+/* Subpestañas del estructurador de configuración (config.js) */
+.sub-tabs .nav-link { color: #ffffff !important; border: 1px solid transparent; }
+.sub-tabs .nav-link.active { background-color: #1e1e24; color: #10b981 !important; border-color: #2d2d34 transparent; }
