@@ -4,21 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Suite de Automatización - Contenidos SENA</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/theme.min.css" rel="stylesheet">
+  <!-- Bootstrap 5 CDN Correcto -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/theme.min.css" rel="stylesheet">
+  <!-- Mammoth para leer .docx en el navegador -->
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
   <style>
-    .nav-tabs .nav-link.active {
-      font-weight: bold;
-      background-color: #fff;
-      border-bottom-color: transparent;
-    }
-    textarea.font-monospace {
-      font-size: 0.82rem;
-      background-color: #f8f9fa;
-    }
+    body { background-color: #f4f6f9; }
+    .nav-tabs .nav-link { color: #495057; font-weight: 500; }
+    .nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd !important; }
+    textarea.font-monospace { font-family: monospace; font-size: 0.85rem; background-color: #f8f9fa; }
   </style>
 </head>
-<body class="bg-light">
+<body>
 
   <div class="container my-5">
     <div class="text-center mb-4">
@@ -26,22 +23,25 @@
       <p class="text-muted">Herramienta visual para procesar Actividades Didácticas y estructurar Componentes Autónomos.</p>
     </div>
 
-    <ul class="nav nav-tabs id="tabsHerramientas" role="tablist">
+    <!-- Pestañas de Navegación -->
+    <ul class="nav nav-tabs" id="tabsHerramientas" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="ad-tab" data-bs-toggle="tab" data-bs-target="#ad-panel" type="button" role="tab">
+        <button class="nav-link active" id="ad-tab" data-bs-toggle="tab" data-bs-target="#ad-panel" type="button" role="tab" aria-controls="ad-panel" aria-selected="true">
           🎯 Actividad Didáctica (AD)
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config-panel" type="button" role="tab">
-          📚 Componente Autónomo (Config/Contenidos)
+        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config-panel" type="button" role="tab" aria-controls="config-panel" aria-selected="false">
+          📚 Componente Autónomo (Config)
         </button>
       </li>
     </ul>
 
+    <!-- Contenedores de las Pestañas -->
     <div class="tab-content bg-white p-4 border border-top-0 rounded-bottom shadow-sm">
       
-      <div class="tab-pane fade show active" id="ad-panel" role="tabpanel">
+      <!-- PESTAÑA 1: ACTIVIDAD DIDÁCTICA -->
+      <div class="tab-pane fade show active" id="ad-panel" role="tabpanel" aria-labelledby="ad-tab">
         <h4 class="text-secondary mb-3">Generador de Actividad.vue</h4>
         <p class="text-muted small">Carga el archivo base y el documento de Word (.docx) para mapear preguntas, opciones y respuestas correctas automáticamente.</p>
         
@@ -63,34 +63,35 @@
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="text-success fw-bold m-0">🎉 ¡Estructura de la AD generada!</h6>
             <div>
-              <button id="btnCopiarAD" class="btn btn-outline-secondary btn-sm me-1">Copiar</button>
+              <button id="btnCopiarAD" class="btn btn-outline-secondary btn-sm me-1">Copiar Código</button>
               <button id="btnDescargarAD" class="btn btn-primary btn-sm">Descargar Actividad.vue</button>
             </div>
           </div>
-          <textarea id="txtResultadoAD" class="form-control font-monospace" rows="12" readonly></textarea>
+          <textarea id="txtResultadoAD" class="form-control font-monospace" rows="15" readonly></textarea>
         </div>
       </div>
 
-      <div class="tab-pane fade" id="config-panel" role="tabpanel">
-        <h4 class="text-secondary mb-3">Estructurador de Tablas de Contenido, Glosario, Referencias y Créditos</h4>
-        <p class="text-muted small">Pega los bloques de texto bruto extraídos de tus documentos guía. El script limpiará, formateará y generará la estructura JavaScript correspondiente.</p>
+      <!-- PESTAÑA 2: COMPONENTE AUTÓNOMO -->
+      <div class="tab-pane fade" id="config-panel" role="tabpanel" aria-labelledby="config-tab">
+        <h4 class="text-secondary mb-3">Estructurador de Configuración de Contenidos</h4>
+        <p class="text-muted small">Pega los bloques de texto bruto extraídos de tus documentos guía. El script limpiará, formateará y generará las propiedades JS.</p>
         
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label fw-bold small">1. Tabla de Contenido en Bruto:</label>
-            <textarea id="rawContenido" class="form-control text-muted small" rows="5" placeholder="Introduon&#10;1. Administración básica de cartera&#10;1.1 Administración en el sector..."></textarea>
+            <textarea id="rawContenido" class="form-control small" rows="5" placeholder="Introducción&#10;1. Administración básica de cartera&#10;1.1 Administración en el sector..."></textarea>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-bold small">2. Glosario en Bruto:</label>
-            <textarea id="rawGlosario" class="form-control text-muted small" rows="5" placeholder="Término: Definición corta de la palabra.&#10;Otro término: Su respectivo significado..."></textarea>
+            <textarea id="rawGlosario" class="form-control small" rows="5" placeholder="Mora: Situación de incumplimiento...&#10;Provisión: Reserva contable constituida..."></textarea>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-bold small">3. Referencias Bibliográficas:</label>
-            <textarea id="rawReferencias" class="form-control text-muted small" rows="4" placeholder="Apellido, A. (Año). Título del libro...&#10;Superintendencia Financiera de Colombia. (2024)..."></textarea>
+            <textarea id="rawReferencias" class="form-control small" rows="5" placeholder="Chiavenato, I. (2017). *Administración de recursos humanos*..."></textarea>
           </div>
           <div class="col-md-6">
             <label class="form-label fw-bold small">4. Créditos / Equipo en Bruto:</label>
-            <textarea id="rawCreditos" class="form-control text-muted small" rows="4" placeholder="LÍNEA DE PRODUCCIÓN&#10;Cargo uno / Nombre del integrante / Centro formativo&#10;Cargo dos / Nombre del integrante / Centro..."></textarea>
+            <textarea id="rawCreditos" class="form-control small" rows="5" placeholder="-- ECOSISTEMA DE RECURSOS DIGITALES&#10;Nombre completo | Cargo | Centro Formativo"></textarea>
           </div>
         </div>
 
@@ -100,22 +101,28 @@
 
         <div id="resultadoComponente" class="mt-4 d-none">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="text-success fw-bold m-0">✔ Código estructurado para tu archivo de configuración:</h6>
+            <h6 class="text-success fw-bold m-0">✔ Código JS unificado listo para exportar:</h6>
             <button id="btnCopiarComp" class="btn btn-outline-success btn-sm">Copiar Código Estructurado</button>
           </div>
-          <textarea id="txtResultadoComp" class="form-control font-monospace" rows="12" readonly></textarea>
+          <textarea id="txtResultadoComp" class="form-control font-monospace" rows="15" readonly></textarea>
         </div>
       </div>
 
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS Bundle CDN Correcto -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ==========================================
-    // LÓGICA LOGÍSTICA DE PESTAÑA 1 (AD)
-    // ==========================================
+    // --- FUNCIONES AUXILIARES ---
+    function limpiarTexto(t) { return t.replace(/\s+/g, ' ').trim(); }
+    function convertirAsteriscosAItalicas(t) {
+      let c = 0;
+      return t.replace(/\*/g, () => { c++; return c % 2 !== 0 ? '<em>' : '</em>'; });
+    }
+
+    // --- LÓGICA ACTIVIDAD DIDÁCTICA (AD) ---
     let contenidoVueOriginal = '';
     let datosDocxExtraidos = '';
 
@@ -126,9 +133,7 @@
     const txtResultadoAD = document.getElementById('txtResultadoAD');
 
     function validarInputsAD() {
-      if (inputVue.files.length > 0 && inputDocx.files.length > 0) {
-        btnProcesarAD.disabled = false;
-      }
+      if (inputVue.files.length > 0 && inputDocx.files.length > 0) { btnProcesarAD.disabled = false; }
     }
 
     inputVue.addEventListener('change', function(e) {
@@ -156,9 +161,7 @@
         const regexImagenes = /imagen:\s*(require\([^)]+\))/g;
         const imagenesPreservadas = [];
         let matchImg;
-        while ((matchImg = regexImagenes.exec(contenidoVueOriginal)) !== null) {
-          imagenesPreservadas.push(matchImg[1]);
-        }
+        while ((matchImg = regexImagenes.exec(contenidoVueOriginal)) !== null) { imagenesPreservadas.push(matchImg[1]); }
 
         const lineas = datosDocxExtraidos.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
         let tema = '', introduccion = '', preguntasNuevas = [], preguntaActual = null;
@@ -199,9 +202,7 @@
         }
         if (preguntaActual) preguntasNuevas.push(preguntaActual);
 
-        if (introduccion && !introduccion.startsWith('<b> Objetivo:</b>')) {
-          introduccion = `<b> Objetivo:</b> ${introduccion}`;
-        }
+        if (introduccion && !introduccion.startsWith('<b> Objetivo:</b>')) { introduccion = `<b> Objetivo:</b> ${introduccion}`; }
 
         const letrasId = ['a', 'b', 'c', 'd', 'e'];
         const pregsJS = preguntasNuevas.map((preg, idx) => {
@@ -223,52 +224,45 @@
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Actividad.vue'; a.click();
     });
 
-    // ==========================================
-    // LÓGICA DE PESTAÑA 2 (COMPONENTE AUTÓNOMO)
-    // ==========================================
+    // --- LÓGICA COMPONENTE AUTÓNOMO ---
     document.getElementById('btnProcesarComponente').addEventListener('click', function() {
-      let output = "";
+      let output = "export default {\n";
 
-      // 1. TABLA DE CONTENIDO
+      // 1. MENU PRINCIPAL[cite: 4]
       const rawCont = document.getElementById('rawContenido').value.trim();
       if (rawCont) {
         const lineas = rawCont.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        output += "  menuPrincipal: [\n";
+        output += "  menuPrincipal: {\n    menu: [\n";
         
+        let subMenuAbierto = false;
+
         lineas.forEach(linea => {
+          if (linea.toLowerCase().startsWith('introduccion') || linea.toLowerCase().startsWith('introducción')) {
+            output += "      {\n        nombreRuta: 'introduccion',\n        icono: 'fas fa-info',\n        titulo: 'Introducción',\n      },\n";
+            return;
+          }
+
           let matchUnidad = linea.match(/^(\d+)\.\s*(.*)/);
           let matchSub = linea.match(/^(\d+\.\d+)\s*(.*)/);
 
-          if (linea.toLowerCase() === 'introduccion' || linea.toLowerCase() === 'introducción') {
-            output += "    {\n      nombreRuta: 'introduccion',\n      icono: 'fas fa-info-circle',\n      titulo: 'Introducción',\n      desarrolloContenidos: true,\n    },\n";
-          } else if (matchSub) {
-            // Es un subtema (Ej: 1.1)
-            output += "        {\n";
-            output += `          num: '${matchSub[1]}',\n`;
-            output += `          titulo: '${matchSub[2].trim()}',\n`;
-            output += `          hash: '${matchSub[2].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '_')}',\n`;
-            output += "        },\n";
+          if (matchSub) {
+            output += `          {\n            numero: '${matchSub[1]}',\n            titulo: '${matchSub[2].trim()}',\n            hash: 't_${matchSub[1].replace(/\./g, '_')}',\n          },\n`;
           } else if (matchUnidad) {
-            // Es un tema principal (Ej: 1.)
-            if (output.endsWith("],\n      },\n")) {
-              // Cerrar subtema anterior si existiera abierto de forma lineal simulada
-            }
-            output += "    {\n";
-            output += `      nombreRuta: 'tema${matchUnidad[1]}',\n`;
-            output += `      icono: 'far fa-file-alt',\n`;
-            output += `      num: '${matchUnidad[1]}',\n`;
-            output += `      titulo: '${matchUnidad[2].trim()}',\n`;
-            output += "      desarrolloContenidos: true,\n";
-            output += "      subMenu: [\n";
-            // Para mantener la flexibilidad del script nativo, cerramos inmediatamente o dejamos bloques
-            output += "      ],\n";
-            output += "    },\n";
+            if (subMenuAbierto) { output += "        ],\n      },\n"; subMenuAbierto = false; }
+            output += "      {\n";
+            output += `        nombreRuta: 'tema${matchUnidad[1]}',\n`;
+            output += `        numero: '${matchUnidad[1]}',\n`;
+            output += `        titulo: '${matchUnidad[2].trim()}',\n`;
+            output += "        desarrolloContenidos: true,\n";
+            output += "        subMenu: [\n";
+            subMenuAbierto = true;
           }
         });
-        output += "  ],\n";
+        if (subMenuAbierto) { output += "        ],\n      },\n"; }
+        output += "    ],\n  },\n";
       }
 
-      // 2. GLOSARIO
+      // 2. GLOSARIO[cite: 4]
       const rawGlos = document.getElementById('rawGlosario').value.trim();
       if (rawGlos) {
         output += "  glosario: [\n";
@@ -278,53 +272,50 @@
           if (partes.length >= 2) {
             let termino = partes[0].trim();
             let significado = partes.slice(1).join(':').trim();
+            significado = significado.charAt(0).toUpperCase() + significado.slice(1);
             output += "    {\n";
             output += `      termino: '${termino}',\n`;
-            output += `      significado:\n        '${signigicado = significado.replace(/'/g, "\\'")}',\n`;
+            output += `      significado:\n        '${significado.replace(/'/g, "\\'")}',\n`;
             output += "    },\n";
           }
         });
         output += "  ],\n";
       }
 
-      // 3. REFERENCIAS
+      // 3. REFERENCIAS[cite: 4]
       const rawRef = document.getElementById('rawReferencias').value.trim();
       if (rawRef) {
         output += "  referencias: [\n";
         const lineasR = rawRef.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         lineasR.forEach(linea => {
+          let refProcesada = convertirAsteriscosAItalicas(linea);
           output += "    {\n";
-          output += `      referencia:\n        '${linea.replace(/'/g, "\\'")}',\n`;
+          output += `      referencia:\n        '${refProcesada.replace(/'/g, "\\'")}',\n`;
           output += "    },\n";
         });
         output += "  ],\n";
       }
 
-      // 4. CRÉDITOS
+      // 4. CRÉDITOS[cite: 4]
       const rawCred = document.getElementById('rawCreditos').value.trim();
       if (rawCred) {
         output += "  creditos: [\n";
-        const bloques = rawCred.split(/\n(?=[A-ZÁÉÍÓÚ\s]{4,}\b)/); // Separar por títulos en mayúsculas
+        const bloques = rawCred.split(/\n(?=--)/); // Separar por bloques con prefijo '--'[cite: 4]
         
         bloques.forEach(bloque => {
           const lineasB = bloque.split('\n').map(l => l.trim()).filter(l => l.length > 0);
           if (lineasB.length > 0) {
-            let tituloBloque = lineasB[0];
+            let tituloBloque = lineasB[0].replace(/^--\s*/, '').toUpperCase();[cite: 4]
             output += "    {\n";
             output += `      titulo: '${tituloBloque}',\n`;
             output += "      autores: [\n";
             
             for (let k = 1; k < lineasB.length; k++) {
-              let partesA = lineasB[k].split(/\s*\/\s*/);
+              let partesA = lineasB[k].split('|');[cite: 4]
               if (partesA.length >= 2) {
-                let cargo = partesA[0].trim();
-                let nombre = partesA[1].trim();
-                let centro = partesA[2] ? partesA[2].trim() : 'Centro de Comercio y Servicios - Regional Tolima';
-                
-                // Formatear cargo agregando etiquetas <em> si requiere cursiva
-                if (!cargo.startsWith('<em>')) {
-                  cargo = `<em>${cargo}</em>`;
-                }
+                let nombre = partesA[0].trim();
+                let cargo = convertirAsteriscosAItalicas(partesA[1].trim());[cite: 4]
+                let centro = partesA[2] ? partesA[2].trim() : 'Centro de Comercio y Servicios - Regional Tolima';[cite: 4]
 
                 output += "        {\n";
                 output += `          nombre: '${nombre}',\n`;
@@ -340,6 +331,7 @@
         output += "  ],\n";
       }
 
+      output += "};\n";
       document.getElementById('txtResultadoComp').value = output;
       document.getElementById('resultadoComponente').classList.remove('d-none');
     });
@@ -347,7 +339,7 @@
     document.getElementById('btnCopiarComp').addEventListener('click', () => {
       document.getElementById('txtResultadoComp').select();
       document.execCommand('copy');
-      alert('📋 ¡Código de Componente copiado al portapapeles!');
+      alert('📋 ¡Código de Configuración copiado!');
     });
   </script>
 </body>
