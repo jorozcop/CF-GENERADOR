@@ -3,104 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Actividades Didácticas (AD)</title>
+  <title>Suite de Automatización - Contenidos SENA</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/theme.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <style>
+    .nav-tabs .nav-link.active {
+      font-weight: bold;
+      background-color: #fff;
+      border-bottom-color: transparent;
+    }
+    textarea.font-monospace {
+      font-size: 0.82rem;
+      background-color: #f8f9fa;
+    }
+  </style>
 </head>
 <body class="bg-light">
 
   <div class="container my-5">
-    <div class="card shadow-sm p-4 mb-4 bg-white rounded">
-      <h2 class="text-primary mb-3">Automatizador de Actividades Didácticas (Vue)</h2>
-      <p class="text-muted">Carga tu archivo base <code>Actividad.vue</code> y el documento de Word <code>.docx</code>. La herramienta procesará los textos e inyectará los nuevos datos manteniendo tus imágenes intactas.</p>
-      
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label fw-bold">1. Seleccionar archivo Actividad.vue base:</label>
-          <input type="file" id="fileVue" class="form-control" accept=".vue">
-        </div>
-        
-        <div class="col-md-6">
-          <label class="form-label fw-bold">2. Seleccionar archivo de Word (.docx):</label>
-          <input type="file" id="fileDocx" class="form-control" accept=".docx">
-        </div>
-      </div>
-
-      <div class="mt-4 text-center">
-        <button id="btnProcesar" class="btn btn-success btn-lg px-5" disabled>Procesar Archivos</button>
-      </div>
+    <div class="text-center mb-4">
+      <h1 class="text-primary fw-bold">Suite de Automatización SENA 2026</h1>
+      <p class="text-muted">Herramienta visual para procesar Actividades Didácticas y estructurar Componentes Autónomos.</p>
     </div>
 
-    <div id="seccionResultado" class="card shadow-sm p-4 bg-white rounded d-none">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="text-success m-0">🎉 ¡Archivo generado con éxito!</h4>
-        <div>
-          <button id="btnCopiar" class="btn btn-outline-secondary btn-sm me-2">Copiar Código</button>
-          <button id="btnDescargar" class="btn btn-primary btn-sm">Descargar Actividad.vue</button>
+    <ul class="nav nav-tabs id="tabsHerramientas" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="ad-tab" data-bs-toggle="tab" data-bs-target="#ad-panel" type="button" role="tab">
+          🎯 Actividad Didáctica (AD)
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config-panel" type="button" role="tab">
+          📚 Componente Autónomo (Config/Contenidos)
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content bg-white p-4 border border-top-0 rounded-bottom shadow-sm">
+      
+      <div class="tab-pane fade show active" id="ad-panel" role="tabpanel">
+        <h4 class="text-secondary mb-3">Generador de Actividad.vue</h4>
+        <p class="text-muted small">Carga el archivo base y el documento de Word (.docx) para mapear preguntas, opciones y respuestas correctas automáticamente.</p>
+        
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">1. Archivo Actividad.vue base:</label>
+            <input type="file" id="fileVue" class="form-control" accept=".vue">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">2. Archivo de Word (.docx):</label>
+            <input type="file" id="fileDocx" class="form-control" accept=".docx">
+          </div>
+        </div>
+        <div class="mt-4 text-center">
+          <button id="btnProcesarAD" class="btn btn-success px-5" disabled>Procesar Actividad Didáctica</button>
+        </div>
+
+        <div id="resultadoAD" class="mt-4 d-none">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-success fw-bold m-0">🎉 ¡Estructura de la AD generada!</h6>
+            <div>
+              <button id="btnCopiarAD" class="btn btn-outline-secondary btn-sm me-1">Copiar</button>
+              <button id="btnDescargarAD" class="btn btn-primary btn-sm">Descargar Actividad.vue</button>
+            </div>
+          </div>
+          <textarea id="txtResultadoAD" class="form-control font-monospace" rows="12" readonly></textarea>
         </div>
       </div>
-      
-      <div class="mb-3">
-        <label class="form-label fw-bold">Vista previa del código generado:</label>
-        <textarea id="txtResultado" class="form-control font-monospace" rows="15" style="font-size: 0.85rem;" readonly></textarea>
+
+      <div class="tab-pane fade" id="config-panel" role="tabpanel">
+        <h4 class="text-secondary mb-3">Estructurador de Tablas de Contenido, Glosario, Referencias y Créditos</h4>
+        <p class="text-muted small">Pega los bloques de texto bruto extraídos de tus documentos guía. El script limpiará, formateará y generará la estructura JavaScript correspondiente.</p>
+        
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">1. Tabla de Contenido en Bruto:</label>
+            <textarea id="rawContenido" class="form-control text-muted small" rows="5" placeholder="Introduon&#10;1. Administración básica de cartera&#10;1.1 Administración en el sector..."></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">2. Glosario en Bruto:</label>
+            <textarea id="rawGlosario" class="form-control text-muted small" rows="5" placeholder="Término: Definición corta de la palabra.&#10;Otro término: Su respectivo significado..."></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">3. Referencias Bibliográficas:</label>
+            <textarea id="rawReferencias" class="form-control text-muted small" rows="4" placeholder="Apellido, A. (Año). Título del libro...&#10;Superintendencia Financiera de Colombia. (2024)..."></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold small">4. Créditos / Equipo en Bruto:</label>
+            <textarea id="rawCreditos" class="form-control text-muted small" rows="4" placeholder="LÍNEA DE PRODUCCIÓN&#10;Cargo uno / Nombre del integrante / Centro formativo&#10;Cargo dos / Nombre del integrante / Centro..."></textarea>
+          </div>
+        </div>
+
+        <div class="mt-4 text-center">
+          <button id="btnProcesarComponente" class="btn btn-primary px-5">Procesar Datos del Componente</button>
+        </div>
+
+        <div id="resultadoComponente" class="mt-4 d-none">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-success fw-bold m-0">✔ Código estructurado para tu archivo de configuración:</h6>
+            <button id="btnCopiarComp" class="btn btn-outline-success btn-sm">Copiar Código Estructurado</button>
+          </div>
+          <textarea id="txtResultadoComp" class="form-control font-monospace" rows="12" readonly></textarea>
+        </div>
       </div>
+
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
+    // ==========================================
+    // LÓGICA LOGÍSTICA DE PESTAÑA 1 (AD)
+    // ==========================================
     let contenidoVueOriginal = '';
     let datosDocxExtraidos = '';
 
     const inputVue = document.getElementById('fileVue');
     const inputDocx = document.getElementById('fileDocx');
-    const btnProcesar = document.getElementById('btnProcesar');
-    const seccionResultado = document.getElementById('seccionResultado');
-    const txtResultado = document.getElementById('txtResultado');
-    const btnDescargar = document.getElementById('btnDescargar');
-    const btnCopiar = document.getElementById('btnCopiar');
+    const btnProcesarAD = document.getElementById('btnProcesarAD');
+    const resultadoAD = document.getElementById('resultadoAD');
+    const txtResultadoAD = document.getElementById('txtResultadoAD');
 
-    // Habilitar botón de procesar solo cuando ambos archivos estén cargados
-    function validarInputs() {
+    function validarInputsAD() {
       if (inputVue.files.length > 0 && inputDocx.files.length > 0) {
-        btnProcesar.disabled = false;
+        btnProcesarAD.disabled = false;
       }
     }
 
-    // Leer el archivo .vue como texto plano
     inputVue.addEventListener('change', function(e) {
       const archivo = e.target.files[0];
       if (!archivo) return;
       const lector = new FileReader();
-      lector.onload = function(evt) {
-        contenidoVueOriginal = evt.target.result;
-        validarInputs();
-      };
+      lector.onload = function(evt) { contenidoVueOriginal = evt.target.result; validarInputsAD(); };
       lector.readAsText(archivo);
     });
 
-    // Leer el archivo .docx usando Mammoth
     inputDocx.addEventListener('change', function(e) {
       const archivo = e.target.files[0];
       if (!archivo) return;
       const lector = new FileReader();
       lector.onload = function(evt) {
-        const arrayBuffer = evt.target.result;
-        mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-          .then(function(resultado) {
-            datosDocxExtraidos = resultado.value;
-            validarInputs();
-          })
-          .catch(function(err) {
-            alert('Error al leer el archivo Word: ' + err.message);
-          });
+        mammoth.extractRawText({ arrayBuffer: evt.target.result })
+          .then(function(res) { datosDocxExtraidos = res.value; validarInputsAD(); })
+          .catch(function(err) { alert('Error al leer Word: ' + err.message); });
       };
       lector.readAsArrayBuffer(archivo);
     });
 
-    // Lógica de procesamiento idéntica a tu script de Node
-    btnProcesar.addEventListener('click', function() {
+    btnProcesarAD.addEventListener('click', function() {
       try {
-        // 1. Extraer imágenes del .vue original
         const regexImagenes = /imagen:\s*(require\([^)]+\))/g;
         const imagenesPreservadas = [];
         let matchImg;
@@ -108,52 +160,40 @@
           imagenesPreservadas.push(matchImg[1]);
         }
 
-        // 2. Procesar líneas del Word
         const lineas = datosDocxExtraidos.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-        
-        let tema = '';
-        let introduccion = '';
-        let preguntasNuevas = [];
-        let preguntaActual = null;
+        let tema = '', introduccion = '', preguntasNuevas = [], preguntaActual = null;
+        let msgAprobado = '¡Excelente! Ha superado la actividad.', msgReprobado = 'Le recomendamos volver a revisar el componente formativo e intentar nuevamente la actividad didáctica.';
 
         for (let i = 0; i < lineas.length; i++) {
           const linea = lineas[i];
-
           if (linea.toLowerCase().startsWith('nombre de la actividad')) {
             tema = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
             tema = tema.replace(/^"|"$/g, '');
             continue;
           }
-
           if (linea.toLowerCase().startsWith('objetivo de la actividad')) {
             introduccion = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
             introduccion = introduccion.replace(/^"|"$/g, '');
             continue;
           }
-
           if (/^pregunta\s*\d+/i.test(linea)) {
             if (preguntaActual) preguntasNuevas.push(preguntaActual);
-            let textoPregunta = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
-            textoPregunta = textoPregunta.replace(/^"|"$/g, '');
-            preguntaActual = { texto: textoPregunta, opciones: [] };
+            let txtP = linea.includes(',') ? linea.substring(linea.indexOf(',') + 1).trim() : lineas[++i].trim();
+            preguntaActual = { texto: txtP.replace(/^"|"$/g, ''), opciones: [] };
             continue;
           }
-
           if (preguntaActual && /^opción\s*[a-e]\)/i.test(linea)) {
-            const esCorrecta = /,x$/i.test(linea) || linea.toLowerCase().endsWith(',x"') || linea.toLowerCase().endsWith('x');
-            let textoOpcion = linea
-              .replace(/^opción\s*[a-e]\)\s*,?/i, '')
-              .replace(/,x$/i, '')
-              .replace(/,x"$/i, '')
-              .replace(/x$/i, '')
-              .replace(/^"|"$/g, '')
-              .trim();
-
-            if (!textoOpcion && lineas[i + 1] && !/^opción\s*[a-e]\)/i.test(lineas[i + 1]) && !lineas[i + 1].toLowerCase().startsWith('comentario')) {
-              textoOpcion = lineas[++i].trim().replace(/^"|"$/g, '');
-            }
-
-            preguntaActual.opciones.push({ texto: textoOpcion, esCorrecta });
+            const esCorrecta = /,x$/i.test(linea) || linea.toLowerCase().endsWith(',x"') || /,[xX]$/.test(linea) || linea.toLowerCase().endsWith('x') || linea.toLowerCase().endsWith('x"');
+            let txtO = linea.replace(/^opción\s*[a-e]\)\s*,?/i, '').replace(/,x$/i, '').replace(/,x"$/i, '').replace(/,X$/i, '').replace(/x$/i, '').replace(/X$/i, '').replace(/^"|"$/g, '').trim();
+            preguntaActual.opciones.push({ texto: txtO, esCorrecta });
+            continue;
+          }
+          if (linea.toLowerCase().startsWith('mensaje cuando supera el 70 %')) {
+            msgAprobado = linea.substring(linea.indexOf(',') + 1).trim().replace(/^"|"$/g, '');
+            continue;
+          }
+          if (linea.toLowerCase().startsWith('mensaje cuando el porcentaje de respuestas correctas es inferior')) {
+            msgReprobado = linea.substring(linea.indexOf(',') + 1).trim().replace(/^"|"$/g, '');
             continue;
           }
         }
@@ -163,82 +203,151 @@
           introduccion = `<b> Objetivo:</b> ${introduccion}`;
         }
 
-        // 3. Generar el bloque formateado de preguntas
         const letrasId = ['a', 'b', 'c', 'd', 'e'];
-        const preguntasFormateadas = preguntasNuevas.map((preg, index) => {
-          const imagenOriginal = imagenesPreservadas[index] || "require('@/assets/actividad/imagen1.png')";
-          
-          const opcionesJS = preg.opciones.map((opc, oIdx) => {
-            return `            {
-              id: '${letrasId[oIdx] || oIdx}',
-              texto: '${opc.texto.replace(/'/g, "\\'")}',
-              esCorrecta: ${opc.esCorrecta},
-            }`;
-          }).join(',\n');
-
-          return `        {
-          id: ${index + 1},
-          texto: '${preg.texto.replace(/'/g, "\\'")}',
-          imagen: ${imagenOriginal},
-          barajarRespuestas: true,
-          opciones: [
-\n${opcionesJS}
-          ],
-          mensaje_correcto: '¡Muy bien! Ha acertado la respuesta.',
-          mensaje_incorrecto: 'Lo sentimos, su respuesta no es la correcta.',
-        }`;
+        const pregsJS = preguntasNuevas.map((preg, idx) => {
+          const img = imagenesPreservadas[idx] || "require('@/assets/actividad/imagen1.png')";
+          const opcsJS = preg.opciones.map((opc, oIdx) => `            {\n              id: '${letrasId[oIdx] || oIdx}',\n              texto: '${opc.texto.replace(/'/g, "\\'")}',\n              esCorrecta: ${opc.esCorrecta},\n            }`).join(',\n');
+          return `        {\n          id: ${idx + 1},\n          texto: '${preg.texto.replace(/'/g, "\\'")}',\n          imagen: ${img},\n          barajarRespuestas: true,\n          opciones: [\n${opcsJS}\n          ],\n          mensaje_correcto: '¡Muy bien! Ha acertado la respuesta.',\n          mensaje_incorrecto: 'Lo sentimos, su respuesta no es la correcta.',\n        }`;
         }).join(',\n');
 
-        // 4. Inyectar los datos mediante la expresión regular
-        const regexCuestionario = /(cuestionario:\s*\{)([\s\S]*?)(mensaje_final_reprobado:[\s\S]*?\n\s*\},)/;
+        const nuevoCuestionario = `cuestionario: {\n      tema: '${tema.replace(/'/g, "\\'")}',\n      titulo: 'Cuestionario',\n      introduccion:\n        '${introduccion.replace(/'/g, "\\'")}',\n      barajarPreguntas: true,\n      titulo_aprobado: '¡BUEN TRABAJO!',\n      titulo_reprobado: 'VUELVA A INTENTARLO.',\n      preguntas: [\n${pregsJS}\n      ],\n      mensaje_final_aprobado: '${msgAprobado.replace(/'/g, "\\'")}',\n      mensaje_final_reprobado:\n        '${msgReprobado.replace(/'/g, "\\'")}',\n    },`;
 
-        const nuevoBloqueCuestionario = `cuestionario: {
-      tema: '${tema.replace(/'/g, "\\'")}',
-      titulo: 'Cuestionario',
-      introduccion:
-        '${introduccion.replace(/'/g, "\\'")}',
-      barajarPreguntas: true,
-      titulo_aprobado: '¡BUEN TRABAJO!',
-      titulo_reprobado: 'VUELVA A INTENTARLO.',
-      preguntas: [
-${preguntasFormateadas}
-      ],
-      mensaje_final_aprobado: '¡Excelente! Ha superado la actividad.',
-      mensaje_final_reprobado:
-        'Le recomendamos volver a revisar el componente formativo e intentar nuevamente la actividad didáctica.',
-    },`;
+        txtResultadoAD.value = contenidoVueOriginal.replace(/(cuestionario:\s*\{)([\s\S]*?)(mensaje_final_reprobado:[\s\S]*?\n\s*\},)/, nuevoCuestionario);
+        resultadoAD.classList.remove('d-none');
+      } catch (err) { alert('Error procesando AD.'); console.error(err); }
+    });
 
-        const resultadoFinal = contenidoVueOriginal.replace(regexCuestionario, nuevoBloqueCuestionario);
+    document.getElementById('btnCopiarAD').addEventListener('click', () => { txtResultadoAD.select(); document.execCommand('copy'); alert('📋 ¡Código de Actividad copiado!'); });
+    document.getElementById('btnDescargarAD').addEventListener('click', () => {
+      const blob = new Blob([txtResultadoAD.value], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Actividad.vue'; a.click();
+    });
 
-        // Muestre los resultados en pantalla
-        txtResultado.value = resultadoFinal;
-        seccionResultado.classList.remove('d-none');
-        window.scrollTo({ top: seccionResultado.offsetTop, behavior: 'smooth' });
+    // ==========================================
+    // LÓGICA DE PESTAÑA 2 (COMPONENTE AUTÓNOMO)
+    // ==========================================
+    document.getElementById('btnProcesarComponente').addEventListener('click', function() {
+      let output = "";
 
-      } catch (error) {
-        alert('❌ Error al procesar los archivos. Revisa el formato del documento.');
-        console.error(error);
+      // 1. TABLA DE CONTENIDO
+      const rawCont = document.getElementById('rawContenido').value.trim();
+      if (rawCont) {
+        const lineas = rawCont.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        output += "  menuPrincipal: [\n";
+        
+        lineas.forEach(linea => {
+          let matchUnidad = linea.match(/^(\d+)\.\s*(.*)/);
+          let matchSub = linea.match(/^(\d+\.\d+)\s*(.*)/);
+
+          if (linea.toLowerCase() === 'introduccion' || linea.toLowerCase() === 'introducción') {
+            output += "    {\n      nombreRuta: 'introduccion',\n      icono: 'fas fa-info-circle',\n      titulo: 'Introducción',\n      desarrolloContenidos: true,\n    },\n";
+          } else if (matchSub) {
+            // Es un subtema (Ej: 1.1)
+            output += "        {\n";
+            output += `          num: '${matchSub[1]}',\n`;
+            output += `          titulo: '${matchSub[2].trim()}',\n`;
+            output += `          hash: '${matchSub[2].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '_')}',\n`;
+            output += "        },\n";
+          } else if (matchUnidad) {
+            // Es un tema principal (Ej: 1.)
+            if (output.endsWith("],\n      },\n")) {
+              // Cerrar subtema anterior si existiera abierto de forma lineal simulada
+            }
+            output += "    {\n";
+            output += `      nombreRuta: 'tema${matchUnidad[1]}',\n`;
+            output += `      icono: 'far fa-file-alt',\n`;
+            output += `      num: '${matchUnidad[1]}',\n`;
+            output += `      titulo: '${matchUnidad[2].trim()}',\n`;
+            output += "      desarrolloContenidos: true,\n";
+            output += "      subMenu: [\n";
+            // Para mantener la flexibilidad del script nativo, cerramos inmediatamente o dejamos bloques
+            output += "      ],\n";
+            output += "    },\n";
+          }
+        });
+        output += "  ],\n";
       }
+
+      // 2. GLOSARIO
+      const rawGlos = document.getElementById('rawGlosario').value.trim();
+      if (rawGlos) {
+        output += "  glosario: [\n";
+        const lineasG = rawGlos.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        lineasG.forEach(linea => {
+          let partes = linea.split(/:\s*/);
+          if (partes.length >= 2) {
+            let termino = partes[0].trim();
+            let significado = partes.slice(1).join(':').trim();
+            output += "    {\n";
+            output += `      termino: '${termino}',\n`;
+            output += `      significado:\n        '${signigicado = significado.replace(/'/g, "\\'")}',\n`;
+            output += "    },\n";
+          }
+        });
+        output += "  ],\n";
+      }
+
+      // 3. REFERENCIAS
+      const rawRef = document.getElementById('rawReferencias').value.trim();
+      if (rawRef) {
+        output += "  referencias: [\n";
+        const lineasR = rawRef.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        lineasR.forEach(linea => {
+          output += "    {\n";
+          output += `      referencia:\n        '${linea.replace(/'/g, "\\'")}',\n`;
+          output += "    },\n";
+        });
+        output += "  ],\n";
+      }
+
+      // 4. CRÉDITOS
+      const rawCred = document.getElementById('rawCreditos').value.trim();
+      if (rawCred) {
+        output += "  creditos: [\n";
+        const bloques = rawCred.split(/\n(?=[A-ZÁÉÍÓÚ\s]{4,}\b)/); // Separar por títulos en mayúsculas
+        
+        bloques.forEach(bloque => {
+          const lineasB = bloque.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+          if (lineasB.length > 0) {
+            let tituloBloque = lineasB[0];
+            output += "    {\n";
+            output += `      titulo: '${tituloBloque}',\n`;
+            output += "      autores: [\n";
+            
+            for (let k = 1; k < lineasB.length; k++) {
+              let partesA = lineasB[k].split(/\s*\/\s*/);
+              if (partesA.length >= 2) {
+                let cargo = partesA[0].trim();
+                let nombre = partesA[1].trim();
+                let centro = partesA[2] ? partesA[2].trim() : 'Centro de Comercio y Servicios - Regional Tolima';
+                
+                // Formatear cargo agregando etiquetas <em> si requiere cursiva
+                if (!cargo.startsWith('<em>')) {
+                  cargo = `<em>${cargo}</em>`;
+                }
+
+                output += "        {\n";
+                output += `          nombre: '${nombre}',\n`;
+                output += `          cargo: '${cargo}',\n`;
+                output += `          centro: '${centro}',\n`;
+                output += "        },\n";
+              }
+            }
+            output += "      ],\n";
+            output += "    },\n";
+          }
+        });
+        output += "  ],\n";
+      }
+
+      document.getElementById('txtResultadoComp').value = output;
+      document.getElementById('resultadoComponente').classList.remove('d-none');
     });
 
-    // Botón para copiar código al portapapeles
-    btnCopiar.addEventListener('click', function() {
-      txtResultado.select();
+    document.getElementById('btnCopiarComp').addEventListener('click', () => {
+      document.getElementById('txtResultadoComp').select();
       document.execCommand('copy');
-      alert('📋 ¡Código copiado al portapapeles!');
-    });
-
-    // Botón para descargar el archivo Actividad.vue directamente
-    btnDescargar.addEventListener('click', function() {
-      const texto = txtResultado.value;
-      const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
-      const elemento = document.createElement('a');
-      elemento.href = URL.createObjectURL(blob);
-      elemento.download = 'Actividad.vue';
-      elemento.style.display = 'none';
-      document.body.appendChild(elemento);
-      elemento.click();
-      document.body.removeChild(elemento);
+      alert('📋 ¡Código de Componente copiado al portapapeles!');
     });
   </script>
 </body>
